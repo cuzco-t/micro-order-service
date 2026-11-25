@@ -1,0 +1,48 @@
+server:
+  port: 8070
+
+spring:
+  application:
+    name: order-service
+  cloud:
+    config:
+      enabled: false
+      import-check:
+        enabled: false
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/order
+    username: ${DB_USER:alibou}
+    password: ${DB_PASSWORD:alibou}
+  jpa:
+    hibernate:
+      ddl-auto: create
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  kafka:
+    producer:
+      bootstrap-servers: ${KAFKA_SERVERS:localhost:9092}
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.type.mapping: orderConfirmation:com.alibou.ecommerce.kafka.OrderConfirmation
+
+eureka:
+  client:
+    enabled: false
+    register-with-eureka: false
+    fetch-registry: false
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+
+application:
+  config:
+    customer-url: ${CUSTOMER_URL:http://localhost:8222/api/v1/customers}
+    payment-url: ${PAYMENT_URL:http://localhost:8222/api/v1/payments}
+    product-url: ${PRODUCT_URL:http://localhost:8050/api/v1/products}
