@@ -1,5 +1,5 @@
 server:
-  port: 8070
+  port: ${PORT:8070}
 
 spring:
   application:
@@ -11,15 +11,18 @@ spring:
         enabled: false
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/order
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:order}}
     username: ${DB_USER:alibou}
     password: ${DB_PASSWORD:alibou}
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   kafka:
+    admin:
+      auto-create: false
+      fail-on-error: false
     producer:
       bootstrap-servers: ${KAFKA_SERVERS:localhost:9092}
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
